@@ -28,6 +28,7 @@ public:
 
 protected:
 	virtual void OnPlayerControllerSet() override;
+	virtual void OnGiveAbility(FGameplayAbilitySpec& abilitySpec) override;
 	virtual void OnRemoveAbility(FGameplayAbilitySpec& abilitySpec) override;
 
 	void CheckCancelTags(const FGameplayTag tag, int32 count);

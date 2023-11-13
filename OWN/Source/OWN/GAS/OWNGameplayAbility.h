@@ -19,6 +19,8 @@ class OWN_API UOWNGameplayAbility : public UGameplayAbility
 	GENERATED_BODY()
 	
 public:
+	UOWNGameplayAbility();
+
 	bool IsPassive() const { return bIsPassive; }
 
 	const UInputAction* GetInputAction() const { return InputAction; }

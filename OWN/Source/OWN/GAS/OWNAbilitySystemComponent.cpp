@@ -101,6 +101,12 @@ void UOWNAbilitySystemComponent::OnPlayerControllerSet()
 	}
 }
 
+void UOWNAbilitySystemComponent::OnGiveAbility(FGameplayAbilitySpec& abilitySpec)
+{
+	Super::OnGiveAbility(abilitySpec);
+
+	BindAbilityInput(abilitySpec);
+}
 void UOWNAbilitySystemComponent::OnRemoveAbility(FGameplayAbilitySpec& abilitySpec)
 {
 	Super::OnRemoveAbility(abilitySpec);

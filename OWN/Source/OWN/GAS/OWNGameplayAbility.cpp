@@ -5,6 +5,11 @@
 #include "GameplayTagContainer.h"
 #include "OWN/Input/OWNEnhancedInputComponent.h"
 
+UOWNGameplayAbility::UOWNGameplayAbility()
+{
+	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+}
+
 void UOWNGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* actorInfo, const FGameplayAbilitySpec& spec)
 {
 	Super::OnGiveAbility(actorInfo, spec);
