@@ -19,6 +19,12 @@ public class OWN : ModuleRules
 			"GameplayAbilities",
             "GameplayTasks",
             "UMG",
-		});
-	}
+        });
+
+		PrivateDependencyModuleNames.AddRange(new string[] 
+		{
+            "NetCore",
+            "GameplayMessageRuntime",
+        });
+    }
 }
