@@ -3,6 +3,7 @@
 #include "OWNPlayerController.h"
 #include "AbilitySystemInterface.h"
 #include "AbilitySystemComponent.h"
+#include "OWNCharacter.h"
 
 void AOWNPlayerController::AcknowledgePossession(APawn* inPawn)
 {
@@ -12,5 +13,15 @@ void AOWNPlayerController::AcknowledgePossession(APawn* inPawn)
 	if (asi)
 	{
 		asi->GetAbilitySystemComponent()->InitAbilityActorInfo(inPawn, inPawn);
+	}
+}
+
+void AOWNPlayerController::SetControlRotation(const FRotator& Rotator)
+{
+	Super::SetControlRotation(Rotator);
+
+	if (AOWNCharacter* character = GetPawn<AOWNCharacter>())
+	{
+		character->ControlRotationDirection = Rotator.Vector();
 	}
 }

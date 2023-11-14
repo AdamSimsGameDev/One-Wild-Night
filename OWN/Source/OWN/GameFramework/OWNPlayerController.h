@@ -16,4 +16,5 @@ class OWN_API AOWNPlayerController : public APlayerController
 
 protected:
 	virtual void AcknowledgePossession(APawn* inPawn) override;
+	virtual void SetControlRotation(const FRotator& Rotator) override;
 };
