@@ -12,6 +12,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "OWN/GAS/OWNAbilitySystemComponent.h"
+#include "Net/UnrealNetwork.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -65,6 +66,13 @@ UAbilitySystemComponent* AOWNCharacter::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
+void AOWNCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AOWNCharacter, ControlRotationDirection);
+}
+
 void AOWNCharacter::PossessedBy(AController* newController)
 {
 	Super::PossessedBy(newController);
@@ -116,35 +124,8 @@ void AOWNCharacter::OnRep_Controller()
 	LastController = pc;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Input
-
-void AOWNCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AOWNCharacter::Move(FVector2D Value)
 {
-	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
-		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-
-		// Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AOWNCharacter::Move);
-
-		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AOWNCharacter::Look);
-	}
-	else
-	{
-		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
-	}
-}
-
-void AOWNCharacter::Move(const FInputActionValue& Value)
-{
-	// input is a Vector2D
-	FVector2D MovementVector = Value.Get<FVector2D>();
-
 	if (Controller != nullptr)
 	{
 		// find out which way is forward
@@ -158,21 +139,18 @@ void AOWNCharacter::Move(const FInputActionValue& Value)
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
 		// add movement 
-		AddMovementInput(ForwardDirection, MovementVector.Y);
-		AddMovementInput(RightDirection, MovementVector.X);
+		AddMovementInput(ForwardDirection, Value.Y);
+		AddMovementInput(RightDirection, Value.X);
 	}
 }
 
-void AOWNCharacter::Look(const FInputActionValue& Value)
+void AOWNCharacter::Look(FVector2D Value)
 {
-	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
-
 	if (Controller != nullptr)
 	{
 		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
+		AddControllerYawInput(Value.X);
+		AddControllerPitchInput(Value.Y);
 	}
 }
 
