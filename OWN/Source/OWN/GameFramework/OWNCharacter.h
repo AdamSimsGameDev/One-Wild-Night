@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
+#include "OWN/GAS/AbilitySet.h"
 #include "Logging/LogMacros.h"
 #include "OWNCharacter.generated.h"
 
@@ -16,6 +17,10 @@ struct FInputActionValue;
 
 class UOWNAbilitySystemComponent;
 class UAbilitySystemComponent;
+
+class UCharacterDefinition;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCharacterDefinitionSet, class AOWNCharacter*, character, UCharacterDefinition*, definition);
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -55,14 +60,29 @@ protected:
 	void BindInputToController(APlayerController* controller);
 	void UnbindInputFromController(APlayerController* controller);
 
+	UFUNCTION()
+	void OnRep_CharacterDefinition();
+
+	UFUNCTION(Server, Reliable)
+	void ServerSetCharacterDefinition(UCharacterDefinition* definition);
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "On Character Definition Set"))
+	void K2_OnCharacterDefinitionSet(UCharacterDefinition* definition);
+
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	UFUNCTION(BlueprintCallable)
+	void SetCharacterDefinition(UCharacterDefinition* definition);
+
 	UPROPERTY(BlueprintReadOnly, Replicated)
 	FVector_NetQuantizeNormal ControlRotationDirection;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnCharacterDefinitionSet OnCharacterDefinitionSet;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = Input)
@@ -73,6 +93,11 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	UOWNAbilitySystemComponent* AbilitySystemComponent = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CharacterDefinition)
+	UCharacterDefinition* CharacterDefinition = nullptr;
+
+	FAbilitySetHandles AbilitySetHandles;
 
 private:
 	// Kept around so we know what to unbind input events from.

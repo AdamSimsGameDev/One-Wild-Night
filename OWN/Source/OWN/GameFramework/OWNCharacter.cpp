@@ -8,6 +8,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/PlayerState.h"
+#include "OWN/GameFramework/CharacterDefinition.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
@@ -71,6 +72,7 @@ void AOWNCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AOWNCharacter, ControlRotationDirection);
+	DOREPLIFETIME(AOWNCharacter, CharacterDefinition);
 }
 
 void AOWNCharacter::PossessedBy(AController* newController)
@@ -188,4 +190,44 @@ void AOWNCharacter::UnbindInputFromController(APlayerController* controller)
 	{
 		subsystem->RemoveMappingContext(InputMappingContext, options);
 	}
+}
+
+void AOWNCharacter::OnRep_CharacterDefinition()
+{
+	UE_LOG(LogTemplateCharacter, Log, TEXT("Character Definition for pawn %s set to %s, name is %s. "), *GetName(), *GetNameSafe(CharacterDefinition), CharacterDefinition ? *CharacterDefinition->DisplayName.ToString() : TEXT("NONE"));
+
+	GetMesh()->SetSkeletalMesh(CharacterDefinition->CharacterMesh);
+	GetMesh()->SetAnimInstanceClass(CharacterDefinition->AnimInstance.Get());
+
+	K2_OnCharacterDefinitionSet(CharacterDefinition);
+
+	OnCharacterDefinitionSet.Broadcast(this, CharacterDefinition);
+}
+
+void AOWNCharacter::SetCharacterDefinition(UCharacterDefinition* definition)
+{
+	if (!IsNetMode(NM_Client))
+	{
+		if (CharacterDefinition)
+		{
+			UAbilitySet::RemoveAbilitySet(AbilitySystemComponent, AbilitySetHandles);
+		}
+
+		CharacterDefinition = definition;
+		OnRep_CharacterDefinition();
+
+		if (CharacterDefinition)
+		{
+			AbilitySetHandles = UAbilitySet::AddAbilitySet(definition->AbilitySet, AbilitySystemComponent);
+		}
+	}
+	else if (IsLocallyControlled())
+	{
+		ServerSetCharacterDefinition(definition);
+	}
+}
+
+void AOWNCharacter::ServerSetCharacterDefinition_Implementation(UCharacterDefinition* definition)
+{
+	SetCharacterDefinition(definition);
 }
