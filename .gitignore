@@ -72,3 +72,6 @@ OWN/Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# GenerateProjectFiles.bat
+OWN/GenerateProjectFiles.bat
