@@ -153,7 +153,7 @@ void UOWNHealthSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackDa
 	}
 	else if (Data.EvaluatedData.Attribute == GetHealingAttribute())
 	{
-		// Convert into +Health and then clamo
+		// Convert into +Health and then clamp
 		SetHealth(FMath::Clamp(GetHealth() + GetHealing(), MinimumHealth, GetMaxHealth()));
 		SetHealing(0.0f);
 	}
