@@ -18,6 +18,7 @@ struct FInputActionValue;
 
 class UOWNAbilitySystemComponent;
 class UAbilitySystemComponent;
+class UAimComponent;
 
 class UCharacterDefinition;
 
@@ -52,6 +53,8 @@ protected:
 	virtual void UnPossessed() override;
 	virtual void OnRep_PlayerState() override;
 	virtual void OnRep_Controller() override;
+
+	UAimComponent* GetAimComponent() const { return AimComponent; }
 
 	UFUNCTION(BlueprintCallable)
 	void Move(FVector2D Value);
@@ -97,6 +100,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	UOWNHealthComponent* HealthComponent = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UAimComponent* AimComponent = nullptr;
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CharacterDefinition)
 	UCharacterDefinition* CharacterDefinition = nullptr;
