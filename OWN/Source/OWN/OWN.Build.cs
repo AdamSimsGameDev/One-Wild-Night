@@ -19,6 +19,7 @@ public class OWN : ModuleRules
 			"GameplayAbilities",
             "GameplayTasks",
             "UMG",
+			"TargetingSystem",
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] 
