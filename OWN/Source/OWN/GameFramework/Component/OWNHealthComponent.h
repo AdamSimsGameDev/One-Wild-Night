@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "OWN/GAS/OWNAbilitySystemComponent.h"
-#include "OWNCharacterHealthComponent.generated.h"
+#include "OWNHealthComponent.generated.h"
 
 class UOWNHealthComponent;
 
@@ -16,7 +16,7 @@ struct FFrame;
 struct FGameplayEffectSpec;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOWNHealth_DeathEvent, AActor*, OwningActor);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOWNHealth_AttributeChanged, UOWNCharacterHealthComponent*, HealthComponent, float, OldValue, float, NewValue, AActor*, Instigator);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOWNHealth_AttributeChanged, UOWNHealthComponent*, HealthComponent, float, OldValue, float, NewValue, AActor*, Instigator);
 
 /**
  * EOWNDeathState
@@ -32,13 +32,13 @@ enum class EOWNDeathState : uint8
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class OWN_API UOWNCharacterHealthComponent : public UActorComponent
+class OWN_API UOWNHealthComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UOWNCharacterHealthComponent(const FObjectInitializer& ObjectInitializer);
+	UOWNHealthComponent(const FObjectInitializer& ObjectInitializer);
 
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
 
@@ -70,7 +70,7 @@ public:
 
 	// Returns the health component if one exists on the specified actor.
 	UFUNCTION(BlueprintPure, Category = "OWN|Health")
-	static UOWNCharacterHealthComponent* FindHealthComponent(const AActor* Actor) { return (Actor ? Actor->FindComponentByClass<UOWNCharacterHealthComponent>() : nullptr); }
+	static UOWNHealthComponent* FindHealthComponent(const AActor* Actor) { return (Actor ? Actor->FindComponentByClass<UOWNHealthComponent>() : nullptr); }
 
 	// Initialize the component using an ability system component.
 	UFUNCTION(BlueprintCallable, Category = "OWN|Health")

@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "OWN/GAS/AbilitySet.h"
 #include "Logging/LogMacros.h"
+#include "Component/OWNHealthComponent.h"
 #include "OWNCharacter.generated.h"
 
 class USpringArmComponent;
@@ -93,6 +94,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	UOWNAbilitySystemComponent* AbilitySystemComponent = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UOWNHealthComponent* HealthComponent = nullptr;
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CharacterDefinition)
 	UCharacterDefinition* CharacterDefinition = nullptr;

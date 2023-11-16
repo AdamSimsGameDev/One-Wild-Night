@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "OWN/GameFramework/Component/OWNCharacterHealthComponent.h"
-#include "OWNCharacterHealthComponent.h"
+#include "OWN/GameFramework/Component/OWNHealthComponent.h"
+#include "OWNHealthComponent.h"
 #include "OWN/GameFramework/Attribute/OWNHealthSet.h"
 #include "Net/UnrealNetwork.h"
 #include "OWN/Tags/OWNTags.h"
@@ -10,7 +10,7 @@
 #include "OWN/Messages/OWNVerbMessage.h"
 #include "GameFramework/GameplayMessageSubsystem.h"
 
-UOWNCharacterHealthComponent::UOWNCharacterHealthComponent(const FObjectInitializer& ObjectInitializer)
+UOWNHealthComponent::UOWNHealthComponent(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 	bAutoActivate = false;
@@ -24,28 +24,28 @@ UOWNCharacterHealthComponent::UOWNCharacterHealthComponent(const FObjectInitiali
 	DeathState = EOWNDeathState::NotDead;
 }
 
-void UOWNCharacterHealthComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void UOWNHealthComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UOWNCharacterHealthComponent, DeathState);
+	DOREPLIFETIME(UOWNHealthComponent, DeathState);
 }
 
-bool UOWNCharacterHealthComponent::HasAuthority() const
+bool UOWNHealthComponent::HasAuthority() const
 {
 	AActor* Owner = GetOwner();
 	check(Owner);
 	return Owner->HasAuthority();
 }
 
-FTimerManager& UOWNCharacterHealthComponent::GetWorldTimerManager() const
+FTimerManager& UOWNHealthComponent::GetWorldTimerManager() const
 {
 	AActor* Owner = GetOwner();
 	check(Owner);
 	return Owner->GetWorldTimerManager();
 }
 
-void UOWNCharacterHealthComponent::InitializeWithAbilitySystem(UOWNAbilitySystemComponent* InASC)
+void UOWNHealthComponent::InitializeWithAbilitySystem(UOWNAbilitySystemComponent* InASC)
 {
 	AActor* Owner = GetOwner();
 	check(Owner);
@@ -84,7 +84,7 @@ void UOWNCharacterHealthComponent::InitializeWithAbilitySystem(UOWNAbilitySystem
 	OnMaxHealthChanged.Broadcast(this, HealthSet->GetHealth(), HealthSet->GetHealth(), nullptr);
 }
 
-void UOWNCharacterHealthComponent::UninitializeFromAbilitySystem()
+void UOWNHealthComponent::UninitializeFromAbilitySystem()
 {
 	ClearGameplayTags();
 
@@ -99,17 +99,17 @@ void UOWNCharacterHealthComponent::UninitializeFromAbilitySystem()
 	AbilitySystemComponent = nullptr;
 }
 
-float UOWNCharacterHealthComponent::GetHealth() const
+float UOWNHealthComponent::GetHealth() const
 {
 	return (HealthSet ? HealthSet->GetHealth() : 0.0f);
 }
 
-float UOWNCharacterHealthComponent::GetMaxHealth() const
+float UOWNHealthComponent::GetMaxHealth() const
 {
 	return (HealthSet ? HealthSet->GetMaxHealth() : 0.0f);
 }
 
-float UOWNCharacterHealthComponent::GetHealthNormalized() const
+float UOWNHealthComponent::GetHealthNormalized() const
 {
 	if (HealthSet)
 	{
@@ -122,7 +122,7 @@ float UOWNCharacterHealthComponent::GetHealthNormalized() const
 	return 0.0f;
 }
 
-void UOWNCharacterHealthComponent::StartDeath()
+void UOWNHealthComponent::StartDeath()
 {
 	if (DeathState != EOWNDeathState::NotDead)
 	{
@@ -144,7 +144,7 @@ void UOWNCharacterHealthComponent::StartDeath()
 	Owner->ForceNetUpdate();
 }
 
-void UOWNCharacterHealthComponent::FinishDeath()
+void UOWNHealthComponent::FinishDeath()
 {
 	if (DeathState != EOWNDeathState::DeathStarted)
 	{
@@ -166,7 +166,7 @@ void UOWNCharacterHealthComponent::FinishDeath()
 	Owner->ForceNetUpdate();
 }
 
-void UOWNCharacterHealthComponent::DamageSelfDestruct(bool bFellOutOfWorld /*= false*/)
+void UOWNHealthComponent::DamageSelfDestruct(bool bFellOutOfWorld /*= false*/)
 {
 	//TODO: when doing damage work fix this
 	/*if ((DeathState == EOWNDeathState::NotDead) && AbilitySystemComponent)
@@ -201,14 +201,14 @@ void UOWNCharacterHealthComponent::DamageSelfDestruct(bool bFellOutOfWorld /*= f
 	}*/
 }
 
-void UOWNCharacterHealthComponent::OnUnregister()
+void UOWNHealthComponent::OnUnregister()
 {
 	UninitializeFromAbilitySystem();
 
 	Super::OnUnregister();
 }
 
-void UOWNCharacterHealthComponent::ClearGameplayTags()
+void UOWNHealthComponent::ClearGameplayTags()
 {
 	if (AbilitySystemComponent)
 	{
@@ -217,17 +217,17 @@ void UOWNCharacterHealthComponent::ClearGameplayTags()
 	}
 }
 
-void UOWNCharacterHealthComponent::HandleHealthChanged(AActor* DamageInstigator, AActor* DamageCauser, const FGameplayEffectSpec* DamageEffectSpec, float DamageMagnitude, float OldValue, float NewValue)
+void UOWNHealthComponent::HandleHealthChanged(AActor* DamageInstigator, AActor* DamageCauser, const FGameplayEffectSpec* DamageEffectSpec, float DamageMagnitude, float OldValue, float NewValue)
 {
 	OnHealthChanged.Broadcast(this, OldValue, NewValue, DamageInstigator);
 }
 
-void UOWNCharacterHealthComponent::HandleMaxHealthChanged(AActor* DamageInstigator, AActor* DamageCauser, const FGameplayEffectSpec* DamageEffectSpec, float DamageMagnitude, float OldValue, float NewValue)
+void UOWNHealthComponent::HandleMaxHealthChanged(AActor* DamageInstigator, AActor* DamageCauser, const FGameplayEffectSpec* DamageEffectSpec, float DamageMagnitude, float OldValue, float NewValue)
 {
 	OnMaxHealthChanged.Broadcast(this, OldValue, NewValue, DamageInstigator);
 }
 
-void UOWNCharacterHealthComponent::HandleOutOfHealth(AActor* DamageInstigator, AActor* DamageCauser, const FGameplayEffectSpec* DamageEffectSpec, float DamageMagnitude, float OldValue, float NewValue)
+void UOWNHealthComponent::HandleOutOfHealth(AActor* DamageInstigator, AActor* DamageCauser, const FGameplayEffectSpec* DamageEffectSpec, float DamageMagnitude, float OldValue, float NewValue)
 {
 /*#if WITH_SERVER_CODE
 	if (AbilitySystemComponent && DamageEffectSpec)
@@ -269,7 +269,7 @@ void UOWNCharacterHealthComponent::HandleOutOfHealth(AActor* DamageInstigator, A
 #endif // #if WITH_SERVER_CODE*/
 }
 
-void UOWNCharacterHealthComponent::OnRep_DeathState(EOWNDeathState OldDeathState)
+void UOWNHealthComponent::OnRep_DeathState(EOWNDeathState OldDeathState)
 {
 	const EOWNDeathState NewDeathState = DeathState;
 
