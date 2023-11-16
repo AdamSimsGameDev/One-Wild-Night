@@ -29,7 +29,7 @@ public:
 	USkeletalMesh* CharacterMesh;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Info)
-	USkeletalMesh* WeaponMesh;
+	FPrimaryAssetId WeaponDefinition;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Info)
 	TSubclassOf<UAnimInstance> AnimInstance;

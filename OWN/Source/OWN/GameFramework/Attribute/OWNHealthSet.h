@@ -37,13 +37,6 @@ DECLARE_MULTICAST_DELEGATE_SixParams(FOWNAttributeEvent, AActor* /*EffectInstiga
 
 class UObject;
 struct FFrame;
-
-//UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_Gameplay_Damage);
-//UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_Gameplay_DamageImmunity);
-//UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_Gameplay_DamageSelfDestruct);
-//UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_Gameplay_FellOutOfWorld);
-//UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_OWN_Damage_Message);
-
 struct FGameplayEffectModCallbackData;
 
 
