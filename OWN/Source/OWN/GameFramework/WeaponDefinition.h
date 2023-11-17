@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+#include "GameplayTagContainer.h"
 #include "WeaponDefinition.generated.h"
 
 class USkeletalMesh;
@@ -25,7 +26,34 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Info)
 	USkeletalMesh* WeaponMesh;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Info)
-	int32 MagSize;
+	template<typename PropertyType>
+	PropertyType GetStat(FGameplayTag tag);
+
+protected:
+	UPROPERTY(EditDefaultsOnly)
+	TMap<FGameplayTag, int32> IntMap;
+	UPROPERTY(EditDefaultsOnly)
+	TMap<FGameplayTag, bool> BoolMap;
+	UPROPERTY(EditDefaultsOnly)
+	TMap<FGameplayTag, float> FloatMap;
 
 };
+
+//template Specializations
+template<>
+inline int32 UWeaponDefinition::GetStat<int32>(FGameplayTag tag)
+{
+	return IntMap.FindChecked(tag);
+}
+
+template<>
+inline bool UWeaponDefinition::GetStat<bool>(FGameplayTag tag)
+{
+	return BoolMap.FindChecked(tag);
+}
+
+template<>
+inline float UWeaponDefinition::GetStat<float>(FGameplayTag tag)
+{
+	return FloatMap.FindChecked(tag);
+}
