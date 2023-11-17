@@ -73,6 +73,9 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "On Character Definition Set"))
 	void K2_OnCharacterDefinitionSet(UCharacterDefinition* definition);
 
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "On Move"))
+	void K2_OnMove(FVector2D Value);
+
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }

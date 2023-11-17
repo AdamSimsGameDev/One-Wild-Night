@@ -147,6 +147,8 @@ void AOWNCharacter::Move(FVector2D Value)
 		// add movement 
 		AddMovementInput(ForwardDirection, Value.Y);
 		AddMovementInput(RightDirection, Value.X);
+
+		K2_OnMove(Value);
 	}
 }
 
