@@ -57,6 +57,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	APlayerController* GetPlayerControllerFromActorInfo() const;
 
+	UFUNCTION(BlueprintCallable)
+	UOWNAbilitySystemComponent* GetOWNAbilitySystemComponentFromActorInfo() const;
+
 	UFUNCTION(BlueprintCallable, Category = Input, meta = (DisplayName = "Get Input Action Value (bool)"))
 	bool GetAbilityInputActionValue_Bool() const;
 	UFUNCTION(BlueprintCallable, Category = Input, meta = (DisplayName = "Get Input Action Value (float)"))

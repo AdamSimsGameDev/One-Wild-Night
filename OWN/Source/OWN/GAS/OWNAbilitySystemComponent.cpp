@@ -91,6 +91,49 @@ void UOWNAbilitySystemComponent::OnLocalAbilityInputCompleted(const UInputAction
 	OnLocalAbilityInput_Internal(action, ETriggerEvent::Completed);
 }
 
+void UOWNAbilitySystemComponent::AddNativeActionTag(FGameplayTag GameplayTag)
+{
+	NativeActions.AddTag(GameplayTag);
+	NativeActionCountMap.FindOrAdd(GameplayTag)++;
+	UpdateTagMap(GameplayTag, 1);
+	GetReplicatedLooseTags_Mutable().AddTag(GameplayTag);
+}
+
+void UOWNAbilitySystemComponent::AddNativeActionTags(FGameplayTagContainer GameplayTags)
+{
+	for (const FGameplayTag& Tag : GameplayTags)
+	{
+		AddNativeActionTag(Tag);
+	}
+}
+
+void UOWNAbilitySystemComponent::RemoveNativeActionTag(FGameplayTag GameplayTag)
+{
+	if (!HasNativeAction(GameplayTag))
+		return;
+
+	// decrement tag count
+	int32& count = NativeActionCountMap[GameplayTag];
+	count--;
+
+	// remove empty tags
+	if (count == 0)
+	{
+		NativeActions.RemoveTag(GameplayTag);
+		GetReplicatedLooseTags_Mutable().RemoveTag(GameplayTag);
+	}
+
+	UpdateTagMap(GameplayTag, -1);
+}
+
+void UOWNAbilitySystemComponent::RemoveNativeActionTags(FGameplayTagContainer GameplayTags)
+{
+	for (const FGameplayTag& Tag : GameplayTags)
+	{
+		RemoveNativeActionTag(Tag);
+	}
+}
+
 void UOWNAbilitySystemComponent::OnPlayerControllerSet()
 {
 	Super::OnPlayerControllerSet();

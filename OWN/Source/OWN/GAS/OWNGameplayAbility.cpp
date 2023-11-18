@@ -3,6 +3,7 @@
 #include "OWNGameplayAbility.h"
 #include "AbilitySystemComponent.h"
 #include "GameplayTagContainer.h"
+#include "OWN/GAS/OWNAbilitySystemComponent.h"
 #include "OWN/Input/OWNEnhancedInputComponent.h"
 
 UOWNGameplayAbility::UOWNGameplayAbility()
@@ -113,6 +114,11 @@ APlayerController* UOWNGameplayAbility::GetPlayerControllerFromActorInfo() const
 		return CurrentActorInfo->PlayerController.Get();
 	}
 	return nullptr;
+}
+
+UOWNAbilitySystemComponent* UOWNGameplayAbility::GetOWNAbilitySystemComponentFromActorInfo() const
+{
+	return Cast<UOWNAbilitySystemComponent>(GetAbilitySystemComponentFromActorInfo());
 }
 
 bool UOWNGameplayAbility::GetAbilityInputActionValue_Bool() const
