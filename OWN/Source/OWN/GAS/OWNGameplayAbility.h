@@ -57,6 +57,8 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	APlayerController* GetPlayerControllerFromActorInfo() const;
 
+	AController* GetControllerFromActorInfo() const;
+
 	UFUNCTION(BlueprintCallable)
 	UOWNAbilitySystemComponent* GetOWNAbilitySystemComponentFromActorInfo() const;
 

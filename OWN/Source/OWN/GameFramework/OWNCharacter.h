@@ -8,6 +8,7 @@
 #include "OWN/GAS/AbilitySet.h"
 #include "Logging/LogMacros.h"
 #include "Component/OWNHealthComponent.h"
+#include "Component/OWNWeaponStateComponent.h"
 #include "OWNCharacter.generated.h"
 
 class USpringArmComponent;
