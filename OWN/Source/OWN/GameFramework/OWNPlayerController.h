@@ -14,6 +14,10 @@ class OWN_API AOWNPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
+public:
+	UFUNCTION(BlueprintCallable)
+	class AOWNPlayerCameraManager* GetOWNPlayerCameraManager() const;
+
 protected:
 	virtual void AcknowledgePossession(APawn* inPawn) override;
 	virtual void SetControlRotation(const FRotator& Rotator) override;

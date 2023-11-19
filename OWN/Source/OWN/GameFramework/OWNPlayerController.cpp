@@ -4,6 +4,12 @@
 #include "AbilitySystemInterface.h"
 #include "AbilitySystemComponent.h"
 #include "OWNCharacter.h"
+#include "OWN/GameFramework/OWNPlayerCameraManager.h"
+
+AOWNPlayerCameraManager* AOWNPlayerController::GetOWNPlayerCameraManager() const
+{
+	return Cast<AOWNPlayerCameraManager>(PlayerCameraManager.Get());
+}
 
 void AOWNPlayerController::AcknowledgePossession(APawn* inPawn)
 {
