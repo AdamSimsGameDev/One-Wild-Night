@@ -156,7 +156,7 @@ protected:
 /**
  * Const iterator for registered components on an actor
  */
-template <typename T>
+/*template <typename T>
 class TConstComponentIterator
 {
 public:
@@ -197,13 +197,13 @@ public:
 	}
 
 protected:
-	/** Gets the current component */
+	/** Gets the current component *//*
 	FORCEINLINE const T* GetComponent() const
 	{
 		return AllComponents[CompIndex];
 	}
 
-	/** Moves the iterator to the next valid component */
+	/** Moves the iterator to the next valid component *//*
 	FORCEINLINE bool Advance()
 	{
 		while (++CompIndex < AllComponents.Num())
@@ -221,12 +221,13 @@ protected:
 	}
 
 private:
-	/** Results from GetComponents */
+	/** Results from GetComponents *//*
 	TInlineComponentArray<const T*> AllComponents;
 
-	/** Index of the current element in the componnet array */
+	/** Index of the current element in the componnet array *//*
 	int32 CompIndex;
 
 	FORCEINLINE bool operator==(const TConstComponentIterator& Other) const { return CompIndex == Other.CompIndex; }
 	FORCEINLINE bool operator!=(const TConstComponentIterator& Other) const { return CompIndex != Other.CompIndex; }
-};
+	
+};*/

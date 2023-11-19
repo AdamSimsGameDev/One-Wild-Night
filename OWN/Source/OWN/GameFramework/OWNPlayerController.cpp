@@ -6,6 +6,11 @@
 #include "OWNCharacter.h"
 #include "OWN/GameFramework/OWNPlayerCameraManager.h"
 
+AOWNPlayerController::AOWNPlayerController()
+{
+	WeaponStateComponent = CreateDefaultSubobject<UOWNWeaponStateComponent>(TEXT("WeaponStateComponent"));
+}
+
 AOWNPlayerCameraManager* AOWNPlayerController::GetOWNPlayerCameraManager() const
 {
 	return Cast<AOWNPlayerCameraManager>(PlayerCameraManager.Get());
