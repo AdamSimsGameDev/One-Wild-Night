@@ -1,0 +1,3 @@
+[submodule "OWN/Plugins/UEGitPlugin"]
+	path = OWN/Plugins/UEGitPlugin
+	url = https://github.com/AdamSimsGameDev/UEGitPlugin
