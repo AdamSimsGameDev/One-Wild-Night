@@ -125,7 +125,7 @@ void AOWNCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(AOWNCharacter, ControlRotationDirection);
+	DOREPLIFETIME_CONDITION(AOWNCharacter, ControlRotationDirection, COND_SkipOwner);
 	DOREPLIFETIME(AOWNCharacter, CharacterDefinition);
 	DOREPLIFETIME(AOWNCharacter, CurrentWeapon);
 }
