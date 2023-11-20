@@ -127,6 +127,7 @@ void AOWNCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 
 	DOREPLIFETIME(AOWNCharacter, ControlRotationDirection);
 	DOREPLIFETIME(AOWNCharacter, CharacterDefinition);
+	DOREPLIFETIME(AOWNCharacter, CurrentWeapon);
 }
 
 void AOWNCharacter::PossessedBy(AController* newController)
