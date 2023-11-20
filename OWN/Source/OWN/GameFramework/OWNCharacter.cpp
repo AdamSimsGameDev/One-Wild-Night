@@ -9,12 +9,15 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/PlayerState.h"
 #include "OWN/GameFramework/CharacterDefinition.h"
+#include "OWN/GameFramework/WeaponDefinition.h"
+#include "OWN/GameFramework/WeaponInstance.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "OWN/GAS/OWNAbilitySystemComponent.h"
 #include "Component/AimComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "Engine/AssetManager.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -69,6 +72,53 @@ AOWNCharacter::AOWNCharacter()
 UAbilitySystemComponent* AOWNCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void AOWNCharacter::SetWeapon(FPrimaryAssetId assetId)
+{
+	CurrentWeaponId = assetId;
+	UAssetManager& assetManager = UAssetManager::Get();
+	assetManager.LoadPrimaryAsset(assetId, { }, FStreamableDelegate::CreateUObject(this, &AOWNCharacter::OnWeaponDefinitionLoaded, assetId));
+}
+
+void AOWNCharacter::OnWeaponDefinitionLoaded(FPrimaryAssetId assetId)
+{
+	if (assetId != CurrentWeaponId)
+		return;
+	UAssetManager& assetManager = UAssetManager::Get();
+	SetWeapon(CastChecked<UWeaponDefinition>(assetManager.GetPrimaryAssetObject(assetId)));
+}
+
+void AOWNCharacter::SetWeapon(UWeaponDefinition* definition)
+{
+	if (!HasAuthority())
+		return;
+
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->OnRemove();
+		CurrentWeapon->Destroy();
+	}
+
+	CurrentWeapon = nullptr;
+
+	if (definition)
+	{
+		// spawn the weapon actor
+		AWeaponInstance* instance = GetWorld()->SpawnActorDeferred<AWeaponInstance>(definition->WeaponInstanceClass.Get(), FTransform(), this, this);
+		// say that we prespawned the actor
+		instance->OnPreSpawned();
+		// set the weapon actor
+		instance->FinishSpawning(FTransform());
+		// attach the weapon actor
+		instance->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("hand_r"));
+		// tell the weapon it has been spawned
+		instance->OnSpawned();
+
+		CurrentWeapon = instance;
+	}
+
+	OnRep_CurrentWeapon();
 }
 
 void AOWNCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -210,6 +260,11 @@ void AOWNCharacter::OnRep_CharacterDefinition()
 	OnCharacterDefinitionSet.Broadcast(this, CharacterDefinition);
 }
 
+void AOWNCharacter::OnRep_CurrentWeapon()
+{
+	K2_OnCurrentWeaponSet(CurrentWeapon);
+}
+
 void AOWNCharacter::SetCharacterDefinition(UCharacterDefinition* definition)
 {
 	if (!IsNetMode(NM_Client))
@@ -217,6 +272,7 @@ void AOWNCharacter::SetCharacterDefinition(UCharacterDefinition* definition)
 		if (CharacterDefinition)
 		{
 			UAbilitySet::RemoveAbilitySet(AbilitySystemComponent, AbilitySetHandles);
+			SetWeapon(nullptr);
 		}
 
 		CharacterDefinition = definition;
@@ -225,6 +281,7 @@ void AOWNCharacter::SetCharacterDefinition(UCharacterDefinition* definition)
 		if (CharacterDefinition)
 		{
 			AbilitySetHandles = UAbilitySet::AddAbilitySet(definition->AbilitySet, AbilitySystemComponent);
+			SetWeapon(definition->WeaponDefinition);
 		}
 	}
 	else if (IsLocallyControlled())

@@ -21,8 +21,10 @@ class UAbilitySystemComponent;
 class UAimComponent;
 
 class UCharacterDefinition;
+class AWeaponInstance;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCharacterDefinitionSet, class AOWNCharacter*, character, UCharacterDefinition*, definition);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCurrentWeaponSet, class AOWNCharacter*, character, AWeaponInstance*, weapon);
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -47,6 +49,10 @@ public:
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
+	void SetWeapon(FPrimaryAssetId assetId);
+	void SetWeapon(class UWeaponDefinition* definition);
+	void OnWeaponDefinitionLoaded(FPrimaryAssetId assetId);
+
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PossessedBy(AController* newController) override;
@@ -67,11 +73,17 @@ protected:
 	UFUNCTION()
 	void OnRep_CharacterDefinition();
 
+	UFUNCTION()
+	void OnRep_CurrentWeapon();
+
 	UFUNCTION(Server, Reliable)
 	void ServerSetCharacterDefinition(UCharacterDefinition* definition);
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "On Character Definition Set"))
 	void K2_OnCharacterDefinitionSet(UCharacterDefinition* definition);
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "On Current Weapon Set"))
+	void K2_OnCurrentWeaponSet(AWeaponInstance* weapon);
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "On Move"))
 	void K2_OnMove(FVector2D Value);
@@ -91,6 +103,9 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnCharacterDefinitionSet OnCharacterDefinitionSet;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnCurrentWeaponSet OnCurrentWeaponSet;
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = Input)
 	const UInputMappingContext* InputMappingContext = nullptr;
@@ -109,6 +124,12 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CharacterDefinition)
 	UCharacterDefinition* CharacterDefinition = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CurrentWeapon)
+	AWeaponInstance* CurrentWeapon;
+
+	UPROPERTY()
+	FPrimaryAssetId CurrentWeaponId;
 
 	FAbilitySetHandles AbilitySetHandles;
 

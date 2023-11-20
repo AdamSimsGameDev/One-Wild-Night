@@ -34,3 +34,5 @@ T* GetDefaultComponent(const AActor* Target)
 		return GetDefaultComponent<T>(CastChecked<AActor>(Target->GetClass()->ClassDefaultObject.Get()));
 	}
 }
+
+#define IsFunctionImplementedInBlueprint(FuncName) GetClass()->FindFunctionByName(#FuncName) && ensure( GetClass()->FindFunctionByName(#FuncName)->GetOuter()) &&  GetClass()->FindFunctionByName(#FuncName)->GetOuter()->IsA(UBlueprintGeneratedClass::StaticClass())

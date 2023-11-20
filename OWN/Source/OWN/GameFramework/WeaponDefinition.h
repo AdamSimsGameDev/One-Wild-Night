@@ -8,6 +8,8 @@
 #include "WeaponDefinition.generated.h"
 
 class USkeletalMesh;
+class UAbilitySet;
+
 /**
  * 
  */
@@ -24,7 +26,10 @@ public:
 	FText DisplayName;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Info)
-	USkeletalMesh* WeaponMesh;
+	TSubclassOf<class AWeaponInstance> WeaponInstanceClass;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Info)
+	UAbilitySet* AbilitySet;
 
 	template<typename PropertyType>
 	PropertyType GetStat(FGameplayTag tag);
