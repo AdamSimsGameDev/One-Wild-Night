@@ -81,24 +81,14 @@ protected:
 protected:
 	static int32 FindFirstPawnHitResult(const TArray<FHitResult>& HitResults);
 
-	// Does a single weapon trace, either sweeping or ray depending on if SweepRadius is above zero
-	FHitResult WeaponTrace(const FVector& StartTrace, const FVector& EndTrace, bool bIsSimulated, OUT TArray<FHitResult>& OutHitResults) const;
-
-	// Wrapper around WeaponTrace to handle trying to do a ray trace before falling back to a sweep trace if there were no hits and SweepRadius is above zero 
-	FHitResult DoSingleBulletTrace(const FVector& StartTrace, const FVector& EndTrace, bool bIsSimulated, OUT TArray<FHitResult>& OutHits) const;
-
-	// Traces all of the bullets in a single cartridge
-	void TraceBulletsInCartridge(const FRangedWeaponFiringInput& InputData, OUT TArray<FHitResult>& OutHits);
-
 	//adds additional trace ignore actors
 	virtual void AddAdditionalTraceIgnoreActors(FCollisionQueryParams& TraceParams) const;
 
 	// Determine the trace channel to use for the weapon trace(s)
 	//virtual ECollisionChannel DetermineTraceChannel(FCollisionQueryParams& TraceParams, bool bIsSimulated) const;
 
-	void PerformLocalTargeting(OUT TArray<FHitResult>& OutHits);
-
 	FVector GetWeaponTargetingSourceLocation() const;
+
 	FTransform GetTargetingTransform(APawn* SourcePawn, EOWNAbilityTargetingSource Source) const;
 
 	void OnTargetDataReadyCallback(const FGameplayAbilityTargetDataHandle& InData, FGameplayTag ApplicationTag);
@@ -112,7 +102,5 @@ protected:
 
 private:
 	FDelegateHandle OnTargetDataReadyCallbackDelegateHandle;
-
-	FDelegateHandle OnTargetingDataReadyCallbackDelegateHandle;
 
 };
