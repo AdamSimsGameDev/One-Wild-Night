@@ -282,10 +282,11 @@ void UOWNGameplayAbility_FromRangedWeapon::OnTargetDataReadyCallback(const FGame
 						{
 							if (FGameplayAbilityTargetData_SingleTargetHit* SingleTargetHit = static_cast<FGameplayAbilityTargetData_SingleTargetHit*>(LocalTargetDataHandle.Get(i)))
 							{
-								if (SingleTargetHit->bHitReplaced)
-								{
+								//TODO figure out where this bool get set
+								//if (SingleTargetHit->bHitReplaced)
+								//{
 									HitReplaces.Add(i);
-								}
+								//}
 							}
 						}
 
