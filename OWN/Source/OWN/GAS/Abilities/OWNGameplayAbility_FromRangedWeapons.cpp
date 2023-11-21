@@ -303,7 +303,7 @@ void UOWNGameplayAbility_FromRangedWeapon::OnTargetDataReadyCallback(const FGame
 		if (bIsTargetDataValid && CommitAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo))
 		{
 			// We fired the weapon, add spread
-			//UOWNRangedWeaponInstance* WeaponData = GetWeaponInstance();
+			//AWeaponInstance* WeaponInstance = GetWeaponInstance();
 			//check(WeaponData);
 			//WeaponData->AddSpread();
 
