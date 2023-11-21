@@ -45,14 +45,21 @@ void UAimComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	FCollisionQueryParams queryParams;
 	queryParams.AddIgnoredActor(GetOwner());
 
-	GetWorld()->LineTraceSingleByChannel(
+	const FVector EndLocation = AimLocation + (AimDirection * AimDistance);
+
+	const bool hit = GetWorld()->LineTraceSingleByChannel(
 		LastHitLocation, 
 		AimLocation,
-		AimLocation + (AimDirection * AimDistance),
+		EndLocation,
 		ECollisionChannel::ECC_WorldStatic,
 		queryParams,
 		FCollisionResponseParams::DefaultResponseParam
 	);
+	if (!hit)
+	{
+		LastHitLocation.Location = EndLocation;
+		LastHitLocation.ImpactPoint = EndLocation;
+	}
 }
 
 void UAimComponent::ServerSetCameraProps_Implementation(FVector_NetQuantize100 location, FVector_NetQuantizeNormal direction)
