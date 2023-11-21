@@ -104,7 +104,7 @@ protected:
 	void OnTargetDataReadyCallback(const FGameplayAbilityTargetDataHandle& InData, FGameplayTag ApplicationTag);
 
 	UFUNCTION(BlueprintCallable)
-	void StartRangedWeaponTargeting();
+	void StartRangedWeaponTargeting(const TArray<FHitResult>& Hits);
 
 	// Called when target data is ready
 	UFUNCTION(BlueprintImplementableEvent)
@@ -112,5 +112,7 @@ protected:
 
 private:
 	FDelegateHandle OnTargetDataReadyCallbackDelegateHandle;
+
+	FDelegateHandle OnTargetingDataReadyCallbackDelegateHandle;
 
 };

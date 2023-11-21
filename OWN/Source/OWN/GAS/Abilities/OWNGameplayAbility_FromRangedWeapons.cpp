@@ -65,16 +65,12 @@ FVector VRandConeNormalDistribution(const FVector& Dir, const float ConeHalfAngl
 	//SourceBlockedTags.AddTag(TAG_WeaponFireBlocked)
 //}
 
-bool UOWNGameplayAbility_FromRangedWeapon::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
-	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags,
-	const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
+bool UOWNGameplayAbility_FromRangedWeapon::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
 {
 	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 }
 
-void UOWNGameplayAbility_FromRangedWeapon::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
-	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
-	const FGameplayEventData* TriggerEventData)
+void UOWNGameplayAbility_FromRangedWeapon::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	// Bind target data callback
 	
@@ -91,9 +87,7 @@ void UOWNGameplayAbility_FromRangedWeapon::ActivateAbility(const FGameplayAbilit
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
 
-void UOWNGameplayAbility_FromRangedWeapon::EndAbility(const FGameplayAbilitySpecHandle Handle,
-	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
-	bool bReplicateEndAbility, bool bWasCancelled)
+void UOWNGameplayAbility_FromRangedWeapon::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	if (IsEndAbilityValid(Handle, ActorInfo))
 	{
@@ -180,8 +174,7 @@ FHitResult UOWNGameplayAbility_FromRangedWeapon::WeaponTrace(const FVector& Star
 	return Hit;
 }
 
-FHitResult UOWNGameplayAbility_FromRangedWeapon::DoSingleBulletTrace(const FVector& StartTrace,
-	const FVector& EndTrace, bool bIsSimulated, TArray<FHitResult>& OutHits) const
+FHitResult UOWNGameplayAbility_FromRangedWeapon::DoSingleBulletTrace(const FVector& StartTrace, const FVector& EndTrace, bool bIsSimulated, TArray<FHitResult>& OutHits) const
 {
 /*#if ENABLE_DRAW_DEBUG
 	if (OWNConsoleVariables::DrawBulletTracesDuration > 0.0f)
@@ -339,7 +332,7 @@ void UOWNGameplayAbility_FromRangedWeapon::PerformLocalTargeting(TArray<FHitResu
 		//}
 #endif
 
-		TraceBulletsInCartridge(InputData, /*out*/ OutHits);
+		//TraceBulletsInCartridge(InputData, /*out*/ OutHits);
 	}
 }
 
@@ -514,7 +507,7 @@ void UOWNGameplayAbility_FromRangedWeapon::OnTargetDataReadyCallback(const FGame
 	MyAbilityComponent->ConsumeClientReplicatedTargetData(CurrentSpecHandle, CurrentActivationInfo.GetActivationPredictionKey());
 }
 
-void UOWNGameplayAbility_FromRangedWeapon::StartRangedWeaponTargeting()
+void UOWNGameplayAbility_FromRangedWeapon::StartRangedWeaponTargeting(const TArray<FHitResult>& Hits)
 {
 	check(CurrentActorInfo);
 
@@ -530,18 +523,15 @@ void UOWNGameplayAbility_FromRangedWeapon::StartRangedWeaponTargeting()
 
 	FScopedPredictionWindow ScopedPrediction(MyAbilityComponent, CurrentActivationInfo.GetActivationPredictionKey());
 
-	TArray<FHitResult> FoundHits;
-	PerformLocalTargeting(/*out*/ FoundHits);
-
 	// Fill out the target data from the hit results
 	FGameplayAbilityTargetDataHandle TargetData;
 	TargetData.UniqueId = WeaponStateComponent ? WeaponStateComponent->GetUnconfirmedServerSideHitMarkerCount() : 0;
 
-	if (FoundHits.Num() > 0)
+	if (Hits.Num() > 0)
 	{
 		const int32 CartridgeID = FMath::Rand();
 
-		for (const FHitResult& FoundHit : FoundHits)
+		for (const FHitResult& FoundHit : Hits)
 		{
 			FUOWNGATargetData_SingleTargetHit* NewTargetData = new FUOWNGATargetData_SingleTargetHit();
 			NewTargetData->HitResult = FoundHit;
@@ -555,7 +545,7 @@ void UOWNGameplayAbility_FromRangedWeapon::StartRangedWeaponTargeting()
 	const bool bProjectileWeapon = false;
 	if (!bProjectileWeapon && (WeaponStateComponent != nullptr))
 	{
-		WeaponStateComponent->AddUnconfirmedServerSideHitMarkers(TargetData, FoundHits);
+		WeaponStateComponent->AddUnconfirmedServerSideHitMarkers(TargetData, Hits);
 	}
 
 	// Process the target data immediately
