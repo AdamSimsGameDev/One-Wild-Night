@@ -137,5 +137,8 @@ protected:
 private:
 	// Kept around so we know what to unbind input events from.
 	TWeakObjectPtr<APlayerController> LastController = nullptr;
+
+	UPROPERTY()
+	FGameplayTagStackContainer CharacterTagStackContainer;
 };
 

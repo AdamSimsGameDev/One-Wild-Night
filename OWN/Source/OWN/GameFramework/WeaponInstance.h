@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "OWN/GAS/AbilitySet.h"
+#include "OWN/Tags/GameplayStackTag.h"
 #include "WeaponInstance.generated.h"
+
 
 class UWeaponDefinition;
 
@@ -45,6 +47,9 @@ protected:
 protected:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = Weapon)
 	UWeaponDefinition* WeaponDefinition;
+
+	UPROPERTY()
+	FGameplayTagStackContainer WeaponTagStackContainer;
 
 	UPROPERTY()
 	FAbilitySetHandles AbilitySetHandles;
