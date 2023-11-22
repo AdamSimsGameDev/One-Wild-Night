@@ -9,6 +9,9 @@
 struct FGameplayTagStackContainer;
 struct FNetDeltaSerializeInfo;
 
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FStackTagCountChanged, FGameplayTag, Tag, int32, Count);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FStackTagCountChangedMulti, FGameplayTag, Tag, int32, Count);
+
 /**
  * Represents one stack of a gameplay tag (tag + count)
  */
@@ -70,6 +73,8 @@ public:
 		return TagToCountMap.Contains(Tag);
 	}
 
+	void ListenForTagChange(FGameplayTag Tag, FStackTagCountChanged InDelegate);
+
 	//~FFastArraySerializer contract
 	void PreReplicatedRemove(const TArrayView<int32> RemovedIndices, int32 FinalSize);
 	void PostReplicatedAdd(const TArrayView<int32> AddedIndices, int32 FinalSize);
@@ -88,6 +93,9 @@ private:
 	
 	// Accelerated list of tag stacks for queries
 	TMap<FGameplayTag, int32> TagToCountMap;
+
+	// Listeners for tag counts changing.
+	TMap<FGameplayTag, FStackTagCountChangedMulti> BoundDelegates;
 };
 
 template<>

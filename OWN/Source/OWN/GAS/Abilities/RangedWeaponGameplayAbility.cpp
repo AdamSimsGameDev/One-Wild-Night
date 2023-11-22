@@ -1,7 +1,7 @@
 // Made by these people: https://github.com/AdamSimsGameDev/One-Wild-Night/graphs/contributors
 
 
-#include "OWNGameplayAbility_FromRangedWeapons.h"
+#include "RangedWeaponGameplayAbility.h"
 #include "OWN/GAS/OWNAbilitySystemComponent.h"
 #include "AbilitySystemComponent.h"
 #include "OWN/GameFramework/Component/OWNWeaponStateComponent.h"
@@ -65,12 +65,12 @@ FVector VRandConeNormalDistribution(const FVector& Dir, const float ConeHalfAngl
 	//SourceBlockedTags.AddTag(TAG_WeaponFireBlocked)
 //}
 
-bool UOWNGameplayAbility_FromRangedWeapon::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
+bool URangedWeaponGameplayAbility::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
 {
 	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 }
 
-void UOWNGameplayAbility_FromRangedWeapon::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
+void URangedWeaponGameplayAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	// Bind target data callback
 	
@@ -87,7 +87,7 @@ void UOWNGameplayAbility_FromRangedWeapon::ActivateAbility(const FGameplayAbilit
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
 
-void UOWNGameplayAbility_FromRangedWeapon::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
+void URangedWeaponGameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	if (IsEndAbilityValid(Handle, ActorInfo))
 	{
@@ -108,7 +108,7 @@ void UOWNGameplayAbility_FromRangedWeapon::EndAbility(const FGameplayAbilitySpec
 	}
 }
 
-int32 UOWNGameplayAbility_FromRangedWeapon::FindFirstPawnHitResult(const TArray<FHitResult>& HitResults)
+int32 URangedWeaponGameplayAbility::FindFirstPawnHitResult(const TArray<FHitResult>& HitResults)
 {
 	for (int32 i = 0; i < HitResults.Num(); ++i)
 	{
@@ -132,7 +132,7 @@ int32 UOWNGameplayAbility_FromRangedWeapon::FindFirstPawnHitResult(const TArray<
 	return INDEX_NONE;
 }
 
-void UOWNGameplayAbility_FromRangedWeapon::AddAdditionalTraceIgnoreActors(FCollisionQueryParams& TraceParams) const
+void URangedWeaponGameplayAbility::AddAdditionalTraceIgnoreActors(FCollisionQueryParams& TraceParams) const
 {
 	if (AActor* Avatar = GetAvatarActorFromActorInfo())
 	{
@@ -149,7 +149,7 @@ void UOWNGameplayAbility_FromRangedWeapon::AddAdditionalTraceIgnoreActors(FColli
 //	return TraceChannel_Weapon;
 //}
 
-FVector UOWNGameplayAbility_FromRangedWeapon::GetWeaponTargetingSourceLocation() const
+FVector URangedWeaponGameplayAbility::GetWeaponTargetingSourceLocation() const
 {
 	// Use Pawn's location as a base
 	APawn* const AvatarPawn = Cast<APawn>(GetAvatarActorFromActorInfo());
@@ -165,7 +165,7 @@ FVector UOWNGameplayAbility_FromRangedWeapon::GetWeaponTargetingSourceLocation()
 	return TargetingSourceLocation;
 }
 
-FTransform UOWNGameplayAbility_FromRangedWeapon::GetTargetingTransform(APawn* SourcePawn,
+FTransform URangedWeaponGameplayAbility::GetTargetingTransform(APawn* SourcePawn,
 	EOWNAbilityTargetingSource Source) const
 {
 	check(SourcePawn);
@@ -244,7 +244,7 @@ FTransform UOWNGameplayAbility_FromRangedWeapon::GetTargetingTransform(APawn* So
 	return FTransform(AimQuat, SourceLoc);
 }
 
-void UOWNGameplayAbility_FromRangedWeapon::OnTargetDataReadyCallback(const FGameplayAbilityTargetDataHandle& InData,
+void URangedWeaponGameplayAbility::OnTargetDataReadyCallback(const FGameplayAbilityTargetDataHandle& InData,
 	FGameplayTag ApplicationTag)
 {
 	UAbilitySystemComponent* MyAbilityComponent = CurrentActorInfo->AbilitySystemComponent.Get();
@@ -321,7 +321,7 @@ void UOWNGameplayAbility_FromRangedWeapon::OnTargetDataReadyCallback(const FGame
 	MyAbilityComponent->ConsumeClientReplicatedTargetData(CurrentSpecHandle, CurrentActivationInfo.GetActivationPredictionKey());
 }
 
-void UOWNGameplayAbility_FromRangedWeapon::StartRangedWeaponTargeting(const TArray<FHitResult>& Hits)
+void URangedWeaponGameplayAbility::StartRangedWeaponTargeting(const TArray<FHitResult>& Hits)
 {
 	check(CurrentActorInfo);
 

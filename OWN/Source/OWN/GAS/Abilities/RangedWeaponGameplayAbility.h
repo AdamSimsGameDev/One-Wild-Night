@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "OWN/GAS/Abilities/OWNGameplayAbility_FromEquipment.h"
+#include "OWN/GAS/Abilities/WeaponGameplayAbility.h"
 #include "Abilities/GameplayAbilityTargetTypes.h"
-#include "OWNGameplayAbility_FromRangedWeapons.generated.h"
+#include "RangedWeaponGameplayAbility.generated.h"
 
 enum ECollisionChannel : int;
 
@@ -42,12 +42,11 @@ enum class EOWNAbilityTargetingSource : uint8
  * 
  */
 UCLASS()
-class OWN_API UOWNGameplayAbility_FromRangedWeapon : public UOWNGameplayAbility_FromEquipment
+class OWN_API URangedWeaponGameplayAbility : public UWeaponGameplayAbility
 {
 	GENERATED_BODY()
-public:
-	//UOWNGameplayAbility_FromRangedWeapon(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+public:
 	//~UGameplayAbility interface
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;

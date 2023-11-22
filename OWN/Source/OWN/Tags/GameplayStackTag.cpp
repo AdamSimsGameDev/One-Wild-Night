@@ -100,6 +100,16 @@ void FGameplayTagStackContainer::SetStackCount(FGameplayTag Tag, int32 StackCoun
 	}
 }
 
+void FGameplayTagStackContainer::ListenForTagChange(FGameplayTag Tag, FStackTagCountChanged InDelegate)
+{
+	if (!Tag.IsValid() || !InDelegate.IsBound())
+	{
+		return;
+	}
+
+	BoundDelegates.FindRef(Tag).Add(InDelegate);
+}
+
 void FGameplayTagStackContainer::PreReplicatedRemove(const TArrayView<int32> RemovedIndices, int32 FinalSize)
 {
 	for (int32 Index : RemovedIndices)
