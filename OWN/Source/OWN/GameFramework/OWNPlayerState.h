@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
+#include "OWN/Tags/GameplayStackTag.h"
 #include "OWNPlayerState.generated.h"
 
 /**
@@ -14,4 +15,8 @@ class OWN_API AOWNPlayerState : public APlayerState
 {
 	GENERATED_BODY()
 	
+private:
+	UPROPERTY()
+	FGameplayTagStackContainer PlayerStateTagStackContainer;
+
 };
