@@ -28,6 +28,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual FVector GetMuzzleLocation() const;
 
+	const FGameplayTagStackContainer& GetTagStackContainer() const { return TagStackContainer; }
+	FGameplayTagStackContainer& GetTagStackContainer_Mutable() { return TagStackContainer; }
+
 protected:
 	void GrantAbilitiesToOwner();
 	void RemoveAbilitiesFromOwner();
@@ -48,8 +51,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = Weapon)
 	UWeaponDefinition* WeaponDefinition;
 
-	UPROPERTY()
-	FGameplayTagStackContainer WeaponTagStackContainer;
+	UPROPERTY(BlueprintReadWrite, Category = Weapon)
+	FGameplayTagStackContainer TagStackContainer;
 
 	UPROPERTY()
 	FAbilitySetHandles AbilitySetHandles;

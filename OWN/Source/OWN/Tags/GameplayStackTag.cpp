@@ -79,6 +79,27 @@ void FGameplayTagStackContainer::RemoveStack(FGameplayTag Tag, int32 StackCount)
 	}
 }
 
+void FGameplayTagStackContainer::SetStackCount(FGameplayTag Tag, int32 StackCount)
+{
+	if (!Tag.IsValid())
+	{
+		FFrame::KismetExecutionMessage(TEXT("An invalid tag was passed to SetStackCount"), ELogVerbosity::Warning);
+		return;
+	}
+
+	for (auto It = Stacks.CreateIterator(); It; ++It)
+	{
+		FGameplayTagStack& Stack = *It;
+		if (Stack.Tag == Tag)
+		{
+			Stack.StackCount = StackCount;
+			TagToCountMap[Tag] = StackCount;
+			MarkItemDirty(Stack);
+			return;
+		}
+	}
+}
+
 void FGameplayTagStackContainer::PreReplicatedRemove(const TArrayView<int32> RemovedIndices, int32 FinalSize)
 {
 	for (int32 Index : RemovedIndices)
