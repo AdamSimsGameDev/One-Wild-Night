@@ -15,6 +15,9 @@ class OWN_API AOWNPlayerState : public APlayerState
 {
 	GENERATED_BODY()
 	
+public:
+	FGameplayTagStackContainer& GetStatTagContainer(){return PlayerStateTagStackContainer;}
+
 private:
 	UPROPERTY()
 	FGameplayTagStackContainer PlayerStateTagStackContainer;

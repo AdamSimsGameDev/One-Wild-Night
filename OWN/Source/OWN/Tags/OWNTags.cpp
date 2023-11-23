@@ -14,3 +14,5 @@ UE_DEFINE_GAMEPLAY_TAG(TAG_Status_Death_Dead, "Status.Death.Dead");
 UE_DEFINE_GAMEPLAY_TAG(TAG_OWN_Elimination_Message, "Elimination.Message");
 UE_DEFINE_GAMEPLAY_TAG(TAG_GameplayEvent_Death, "Gameplay.Death");
 UE_DEFINE_GAMEPLAY_TAG(TAG_GameplayEvent_Round_State, "Gameplay.RoundState");
+UE_DEFINE_GAMEPLAY_TAG(TAG_Event_Game_WinningScore, "Game.WinningScore");
+UE_DEFINE_GAMEPLAY_TAG(TAG_Event_Round_WinningScore_Reached, "Game.WinningScore.Reached");
