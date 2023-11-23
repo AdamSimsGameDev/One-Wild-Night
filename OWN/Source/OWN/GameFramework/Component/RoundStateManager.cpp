@@ -4,6 +4,8 @@
 #include "RoundStateManager.h"
 #include "GameFramework/GameplayMessageSubsystem.h"
 #include "Net/UnrealNetwork.h"
+#include "OWN/Messages/MessageTypes.h"
+#include "OWN/Tags/OWNTags.h"
 
 URoundStateManager::URoundStateManager(const FObjectInitializer& objectInitializer)
 	: Super(objectInitializer)
@@ -179,9 +181,11 @@ void URoundStateManager::OnRep_RoundState(ERoundState oldState)
 	// Let the blueprint know that the round state has changed
 	K2_OnRoundStateChanged(RoundState);
 
-	//need to figure out the message we wanna send from this
-	//UGameplayMessageSubsystem& MessageSystem = UGameplayMessageSubsystem::Get(GetWorld());
-	//MessageSystem.BroadcastMessage(TAG_GameplayEvent_Round_State, Message);
+	FRoundStateMessage message;
+	message.RoundState = RoundState;
+
+	UGameplayMessageSubsystem& MessageSystem = UGameplayMessageSubsystem::Get(GetWorld());
+	MessageSystem.BroadcastMessage(TAG_GameplayEvent_Round_State, message);
 }
 
 void URoundStateManager::OnRep_ElapsedTime()
