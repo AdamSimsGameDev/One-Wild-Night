@@ -48,7 +48,7 @@ public:
 	TArray<TSubclassOf<class UGameplayEffect>> Effects;
 
 	UFUNCTION(BlueprintCallable, Category = AbilitySet)
-	static FAbilitySetHandles AddAbilitySet(const UAbilitySet* abilitySet, UOWNAbilitySystemComponent* abilitySystemComponent);
+	static FAbilitySetHandles AddAbilitySet(const UAbilitySet* abilitySet, UOWNAbilitySystemComponent* abilitySystemComponent, UObject* sourceObject);
 	
 	UFUNCTION(BlueprintCallable, Category = AbilitySet)
 	static void RemoveAbilitySet(UOWNAbilitySystemComponent* abilitySystemComponent, FAbilitySetHandles handles);

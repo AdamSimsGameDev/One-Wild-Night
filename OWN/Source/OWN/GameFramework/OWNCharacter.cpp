@@ -282,7 +282,7 @@ void AOWNCharacter::SetCharacterDefinition(UCharacterDefinition* definition)
 
 		if (CharacterDefinition)
 		{
-			AbilitySetHandles = UAbilitySet::AddAbilitySet(definition->AbilitySet, AbilitySystemComponent);
+			AbilitySetHandles = UAbilitySet::AddAbilitySet(definition->AbilitySet, AbilitySystemComponent, this);
 			SetWeapon(definition->WeaponDefinition);
 		}
 	}

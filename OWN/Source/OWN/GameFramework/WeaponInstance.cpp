@@ -40,7 +40,7 @@ FVector AWeaponInstance::GetMuzzleLocation() const
 
 void AWeaponInstance::GrantAbilitiesToOwner()
 {
-	AbilitySetHandles = UAbilitySet::AddAbilitySet(WeaponDefinition->AbilitySet, UOWNAbilitySystemGlobals::GetOWNAbilitySystemComponentFromActor(GetOwner()));
+	AbilitySetHandles = UAbilitySet::AddAbilitySet(WeaponDefinition->AbilitySet, UOWNAbilitySystemGlobals::GetOWNAbilitySystemComponentFromActor(GetOwner()), this);
 }
 
 void AWeaponInstance::RemoveAbilitiesFromOwner()

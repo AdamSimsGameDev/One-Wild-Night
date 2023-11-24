@@ -5,7 +5,7 @@
 #include "OWNGameplayAbility.h"
 #include "OWN/GameFramework/OWNPlayerController.h"
 
-FAbilitySetHandles UAbilitySet::AddAbilitySet(const UAbilitySet* abilitySet, UOWNAbilitySystemComponent* abilitySystemComponent)
+FAbilitySetHandles UAbilitySet::AddAbilitySet(const UAbilitySet* abilitySet, UOWNAbilitySystemComponent* abilitySystemComponent, UObject* sourceObject)
 {
 	if (!abilitySystemComponent || !abilitySet)
 	{
@@ -18,6 +18,7 @@ FAbilitySetHandles UAbilitySet::AddAbilitySet(const UAbilitySet* abilitySet, UOW
 	for (const FAbilitySetAbilityData& ability : abilitySet->Abilities)
 	{
 		FGameplayAbilitySpec abilitySpec = abilitySystemComponent->BuildAbilitySpecFromClass(ability.AbilityClass, ability.AbilityLevel, -1);
+		abilitySpec.SourceObject = sourceObject;
 		handles.AbilityHandles.Add(abilitySystemComponent->GiveAbility(abilitySpec));
 	}
 
