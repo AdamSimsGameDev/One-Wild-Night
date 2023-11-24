@@ -9,3 +9,5 @@ FPrimaryAssetId UWeaponDefinition::GetPrimaryAssetId() const
 {
 	return FPrimaryAssetId(NAME_WeaponDefinition, GetFName());
 }
+
+

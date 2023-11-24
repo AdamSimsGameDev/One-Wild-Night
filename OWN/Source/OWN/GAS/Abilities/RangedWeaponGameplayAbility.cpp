@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "OWN/GameFramework/Component/OWNWeaponStateComponent.h"
 #include "OWN/GAS/Targeting/OWNGATargetData_SingleTargetData.h"
+#include "OWN/GameFramework/WeaponInstance.h"
 
 
 static float DrawBulletTracesDuration = 0.0f;
@@ -303,9 +304,9 @@ void URangedWeaponGameplayAbility::OnTargetDataReadyCallback(const FGameplayAbil
 		if (bIsTargetDataValid && CommitAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo))
 		{
 			// We fired the weapon, add spread
-			//AWeaponInstance* WeaponInstance = GetWeaponInstance();
-			//check(WeaponData);
-			//WeaponData->AddSpread();
+			AWeaponInstance* WeaponInstance = GetWeaponInstance();
+			check(WeaponInstance);
+			WeaponInstance->AddSpread();
 
 			// Let the blueprint do stuff like apply effects to the targets
 			OnRangedWeaponTargetDataReady(LocalTargetDataHandle);

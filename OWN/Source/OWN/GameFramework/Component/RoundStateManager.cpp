@@ -99,7 +99,6 @@ void URoundStateManager::SetRoundState(ERoundState newState)
 		//need to grab any round setting here
 
 		ERoundState oldState = RoundState;
-		//MARK_PROPERTY_DIRTY_FROM_NAME(URoundStateManager, RoundState, this);
 		RoundState = newState;
 
 		switch (RoundState)
